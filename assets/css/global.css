@@ -23,3 +23,29 @@
 .form-label {
     font-size: 15px;
 }
+
+.transparent {
+    background: transparent;
+}
+
+.transparent-border {
+    background: transparent;
+    border: solid 1px;
+    border-color: #FFF;  
+}
+
+.transparent-border:hover {
+    background: #FFF;
+    color: #000000 !important;
+}
+
+.panel {
+    margin: 15px;
+    padding: 20px;
+    border: solid 1px;
+    border-color: #FFF;
+}
+
+.dropdown-content {
+    margin-top: 4%;
+}

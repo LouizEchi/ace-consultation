@@ -2,8 +2,7 @@
 <html>
     <head>
         <title>Student Consultation <?php isset($page_title) ? ' - ' . $page_title : '' ?></title>
-        
-         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!-- Import materialize.css -->
         <link type="text/css" rel="stylesheet" href="<?=base_url()?>assets/css/materialize/css/materialize.css" media="screen, projection"/>
         <link type="text/css" rel="stylesheet" href="<?=base_url()?>assets/css/global.css"/>
@@ -33,24 +32,29 @@
         
     </head>
     <body>
+        <input type="hidden" name="page_title" value="<?= isset($page_title) ? ' - ' . $page_title : ''?>">
+        <input type="hidden" name="menu_id" value="<?= isset($menu_id) ? $menu_id : ''?>">
         <?php
             if(isset($s_page_type))
             {
                 if($s_page_type == 'admin')
                 {
 
-                    echo'<nav>' .
-                            '<div class="nav-wrapper red darken-1">' .
+                    echo'<nav class="transparent">' .
+                            '<div class="nav-wrapper transparent">' .
                                 '<ul class="right">' . 
                                     '<li><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'login/logout">Logout</a></li>' .
                                 '</ul>' .
                                 '<ul id="nav-mobile" class="left hide-on-med-and-down">' .
-                                    '<li><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin"> <i class="material-icons left">home</i> Home </a></li>' .
-                                    '<li><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin/student_logs"> <i class="material-icons left ">book</i> Student Logs </a></li>' .
-                                    '<li><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin/teacher_logs"> <i class="material-icons left ">work</i> Teacher Logs </a></li>' .
+                                    '<li id="menu_home"><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin"> <i class="material-icons left">home</i> Home </a></li>' .
+                                    '<li id="menu_records"><a  class="dropdown-button" href="#" data-activates="records"> <i class="material-icons left">book</i> Records </a></li>' .
                                 '</ul>'.
                             '</div>' .
-                        '</nav>';
+                        '</nav>' .
+                        '<ul id="records" class="dropdown-content transparent">' .
+                            '<li id="menu_student_records" ><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin/student_logs">Student</a></li>' .
+                            '<li id="menu_teacher_records"><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin/teacher_logs">Teacher</a></li>' .
+                        '</ul>';
                 }
             }
         ?>
