@@ -1,0 +1,25 @@
+.outer {
+    height: 100vh;
+    text-align: center;
+}
+
+.outer:before{
+    content:"";
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+
+.inner {
+    width: 66%;
+    display:inline-block;
+    vertical-align:middle;
+}
+
+.hidden {
+    display: none;   
+}
+
+.form-label {
+    font-size: 15px;
+}

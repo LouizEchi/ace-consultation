@@ -1,0 +1,14 @@
+<IfModule authz_core_module>
+    Require all denied
+</IfModule>
+<IfModule !authz_core_module>
+    Deny from all
+</IfModule>
+
+RewriteEngine on
+RewriteCond $1 !^(index\.php|images|robots\.txt)
+RewriteRule ^(.*)$ /index.php/$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(images)(.*)/$ 404 [L] #deny images listing because we have allowed access to images below
+RewriteRule ^(images)/(.*) $1/$2 [L]
