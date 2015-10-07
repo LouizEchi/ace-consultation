@@ -24,7 +24,8 @@ class Login extends CI_Controller {
 		$this->load->helper('url');
 		$this->data['s_page_header'] = 'home';
 		$this->data['s_page_type'] = 'home';
-
+		$this->load->model('user_model');
+		$this->load->library('form_validation');
 		$this->data['a_js_scripts'] = array(
 				base_url()  . 'assets/js/home/index.js'
 			);
@@ -37,46 +38,46 @@ class Login extends CI_Controller {
 	public function index()
 	{
 
-		$this->load->model('User_model');
-		$this->load->model('Admin_model');
+		$this->form_validation->set_rules('username', 'Username', 'trim|required');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 
-
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
-
-		if ($this->form_validation->run() == FALSE) {
-			if(isset($this->session->userdata['logged_in'])){
-				$this->load->view('php/admin_page', $this->session->userdata['logged_in']);
-				redirect('admin/admin_index');
-			}else{
-				$this->load->view('login');
-			}
-		} else {
-			$data = array(
+		if ($this->form_validation->run())
+		{
+			$a_user_data = array(
 				'username' => $this->input->post('username'),
 				'password' => $this->input->post('password')
 			);
-			$result = $this->projectmodel->login($data);
-			if ($result == TRUE) {
-				$username = $this->input->post('username');
-				$result = $this->projectmodel->info($username);
-				if ($result != false) {
-					$session_data = array(
-					'username' => $result[0]->username,
-					);
-				// Add user data in session
-					$this->session->set_userdata('logged_in', $session_data);
-					$this->load->view('php/admin_page', $session_data);
-					redirect('admin/admin_index');
 
+			$user_data = $this->user_model->login($a_user_data);
+			if(!$this->user_model->error_message && $user_data)
+			{
+				$this->session->set_userdata('user', $user_data[0]);
+				if($user_data[0]['user_type'] == 1)
+				{
+					redirect(base_url().'student');
 				}
-			} else {
-				$data = array(
-				'error_message' => 'Invalid Username or Password'
-				);
-				$this->load->view('login', $data);
+				elseif($user_data[0]['user_type'] == 3)
+				{
+					redirect(base_url().'admin');
+				}
 			}
-		}	
+			else
+			{
+				$this->data['error'] = $this->user_model->error_message;
+			}
+		}
+		else
+		{
+			$this->data['error'] = validation_errors();
+			print_r(validation_errors());
+		}
+		
+	}
+
+	public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect(base_url());
 	}
     
 }

@@ -20,11 +20,19 @@
     display: none;   
 }
 
+.time-logs {
+    margin-right: 10px;
+}
+
 .form-label {
     font-size: 15px;
 }
 
 .transparent {
+    background: transparent;
+}
+
+.select-transparent > li {
     background: transparent;
 }
 

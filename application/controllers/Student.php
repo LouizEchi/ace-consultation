@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Student extends CI_Controller {
+class Student extends Consultation_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -33,21 +33,62 @@ class Student extends CI_Controller {
 		$this->data['s_page_type'] = 'student';
 
 		$this->data['a_js_scripts'] = array(
-				base_url()  . 'assets/js/student/index.js'
+				base_url()  . 'assets/js/student/base.js'
 			);
 
 		$this->data['a_css_sheets'] = array(
-				base_url() . 'assets/css/student/index.css'
+				base_url() . 'assets/css/student/base.css'
 			);
+
+		if($user = $this->session->userdata('user'))
+		{
+			if($user['user_type'] != 1)
+			{
+				redirect('/', 'refresh');
+			}
+			else
+			{
+				$student = $this->student_model->retrieve(['user_id' => $user['id']])[0];
+
+				if(!$student)
+					redirect(base_url());
+				$this->data['student_id'] = $student->id;
+				$this->data['user_id'] = $student->user_id;
+				$this->data['name'] =  $student->first_name . ' ' . $student->last_name;
+
+			}
+		}
 	}
     
 	public function index()
 	{
+
+		$this->data['a_js_scripts'] = array(
+				base_url()  . 'assets/js/student/base.js',
+				base_url()  . 'assets/js/student/index.js'
+			);
+
+		$this->data['a_css_sheets'] = array(
+				base_url() . 'assets/css/student/base.css',
+				base_url() . 'assets/css/student/index.css'
+			);
+
+		$this->load->model('category_model');
 		$a_teachers_list = array();
+		$a_category_list = array();
+		$user = $this->session->userdata('user');
+
+
 		foreach($this->teacher_model->retrieveAll() as $key => $o_teacher_names) {
 			$a_teachers_list[$o_teacher_names->id] = $o_teacher_names->first_name . ' ' . $o_teacher_names->last_name;
 		}
+
+		foreach($this->category_model->retrieveAll() as $key => $o_category) {
+			$a_category_list[$o_category->id] = $o_category->category_name;
+		}
+
 		$this->data['a_teachers_list'] = $a_teachers_list;
+		$this->data['a_category_list'] = $a_category_list;
 		$this->data['s_main_content'] = 'student/index';
 		$this->load->view('includes/template', $this->data);
 	}

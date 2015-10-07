@@ -45,10 +45,32 @@
                                 '<ul class="right">' . 
                                     '<li><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'login/logout">Logout</a></li>' .
                                 '</ul>' .
-                                '<ul id="nav-mobile" class="left hide-on-med-and-down">' .
+                                '<ul id="nav-mobile" class="left">' .
                                     '<li id="menu_home"><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin"> <i class="material-icons left">home</i> Home </a></li>' .
                                     '<li id="menu_records"><a  class="dropdown-button" href="#" data-activates="records"> <i class="material-icons left">book</i> Records </a></li>' .
                                 '</ul>'.
+                            '</div>' .
+                        '</nav>' .
+                        '<ul id="records" class="dropdown-content transparent">' .
+                            '<li id="menu_student_records" ><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin/student_logs">Student</a></li>' .
+                            '<li id="menu_teacher_records"><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'admin/teacher_logs">Teacher</a></li>' .
+                        '</ul>';
+                }
+                elseif($s_page_type == 'student')
+                {
+                    $intro = isset($name) ? 'Welcome, ' . $name : '';
+                    echo'<nav class="transparent">' .
+                            '<div class="nav-wrapper transparent">' .
+                                '<div class="right time-logs" data-check-url="'.base_url().'logs/get_latest_time_in/'.$student_id.'">' .
+                                    '<a class="transparent-border btn-large btn-form-side waves-effect waves-teal white-text text-lighten-1 time-in" data-activates="slide-out" href="#">Time In</a>' . 
+                                    '<a class="transparent-border btn-large waves-effect waves-teal white-text text-lighten-1 hide time-out" href="'.base_url().'logs/time_out/'.$student_id.'">Time Out</a>' . 
+                                '</div>' .
+                                '<ul id="nav-mobile" class="left"><li><a>' .
+                                    $intro .
+                                '</a></li>'.
+                                    '<li><a class="waves-effect waves-teal white-text text-lighten-1" href="'. base_url() .'login/logout">Logout</a></li>' .
+                                '</ul>'.
+
                             '</div>' .
                         '</nav>' .
                         '<ul id="records" class="dropdown-content transparent">' .

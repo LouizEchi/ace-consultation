@@ -46,8 +46,11 @@ class student_model extends Consultation_Model {
 		$data = $this->getFillableData($data);
 		if($data)
 		{
-			$data['students.id'] = $data['id'];
-			unset($data['id']);
+			if(isset($data['id']))
+			{
+				$data['students.id'] = $data['id'];
+				unset($data['id']);
+			}
 			$this->db->select($fields);
 			$this->db->from('students');
 			$this->db->where($data);

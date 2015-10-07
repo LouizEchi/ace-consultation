@@ -19,9 +19,9 @@ Class user_model extends Consultation_Model
         				  );
 	}
 
-	public function login($data , $user_type)
+	public function login($data)
 	{
-		$condition = "username ="."'".$data["username"]."' AND "."password = "."'".md5($data["password"])."' AND "." user_type =".$user_type;
+		$condition = "username ="."'".$data["username"]."' AND "."password = "."'".md5($data["password"])."'";
 
 		$this->db->select('*');
 		$this->db->from('users');
@@ -29,10 +29,9 @@ Class user_model extends Consultation_Model
 		$this->db->limit(1);
 
 		$query = $this->db->get();
-
 		if($query->num_rows() == 1)
 		{
-			return TRUE;
+			return $query->result_array();
 		}else{
 			return FALSE;
 		}

@@ -1,0 +1,29 @@
+body {
+	background: url('/assets/img/backgrounds/student.jpg');
+}
+
+.side-form {
+    background: rgba(170, 99, 99, 0.6);
+}
+
+.input-field .textarea {
+	margin-bottom: 10px;
+	margin-top: 10px
+}
+
+#clock {
+	font-size: 40px;
+}
+
+.clock {
+	background: rgba(239,83,80,0.95);
+	margin-top: 0px;
+}
+
+.minor-date {
+	font-size: 14px;
+}
+
+.panel-student {
+	background: rgba(2,3,0,0.14);
+}

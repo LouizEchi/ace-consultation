@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin extends CI_Controller {
+class Admin extends Consultation_Controller {
 
     function __construct()
 	{
@@ -17,6 +17,14 @@ class Admin extends CI_Controller {
 		$this->data['a_css_sheets'] = array(
 			base_url() . 'assets/css/admin/base.css'
 		);
+
+		if($user = $this->session->userdata('user'))
+		{
+			if($user['user_type'] != 3)
+			{
+				redirect('/', 'refresh');
+			}
+		}
 	}
     
 	public function index()
