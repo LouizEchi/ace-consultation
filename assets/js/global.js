@@ -76,10 +76,28 @@ function load_table(table) {
 							});
 
 	         				clone.find('[data-edit-url]').each(function(){
-	        					edit_url = $(this).attr('data-edit-url').split('/id_placeholder').join('/' + o_response.data[i]['id']);
-	        					$(this).attr('href', edit_url);
-	        					$(this).attr('data-id', o_response.data[i]['id']);
-	        					$(this).click(function(e){
+	         					var edit_button = $(this);
+	        					edit_url = edit_button.attr('data-edit-url').split('/id_placeholder').join('/' + o_response.data[i]['id']);
+	        					edit_button.attr('href', edit_url);
+	        					edit_button.attr('data-id', o_response.data[i]['id']);
+								edit_button.sideNav({
+							      menuWidth: 500, // Default is 240
+							      edge: 'left', // Choose the horizontal origin
+							      closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+							    });
+	        					edit_button.click(function(e){
+	        						e.preventDefault();
+									$('[data-put-url]').each(function(e){
+										var edit_form = $(this);
+										var id = edit_button.data('id');
+										var a_url = [];
+										a_url['get'] = edit_form.data('get-url').split('/id_placeholder').join('/' + id);
+										a_url['put'] = edit_form.data('temp-put-url').split('/id_placeholder').join('/' + id);
+										edit_form.removeClass('hide');
+										initialize_edit_form(a_url, edit_form, _this);	
+									});
+									$('[data-post-url]').addClass('hide');
+
 	        					});
 	        				});
 	        				_this.find('tbody').append(clone);
@@ -146,4 +164,62 @@ function delete_item(btn, table)
   			{
   			}
 	});	
+}
+
+function initialize_edit_form(a_url, edit_form, table)
+{
+	$.ajax({
+  			url:  a_url['get'],
+  			type: 'GET',
+  			success: function(o_response, s_message, o_xhr) {
+    			if(typeof(o_response.success) != 'undefined')
+    			{
+    				if(!$.isEmptyObject(o_response.data)) {
+    					edit_form_id = edit_form.attr('id');
+    					edit_form.attr('data-put-url', edit_form.data('temp-put-url').split('/id_placeholder').join('/' + o_response.data['id']));
+    					for(var i in o_response.data) {
+    						var edit_data = o_response.data[i];
+    						if(typeof(edit_form.find('[name="'+i+'"]')) != 'undefined')
+    						{
+    							input_element = edit_form.find('[name="'+i+'"]');
+    							input_element.val(edit_data);
+    							input_element.siblings('label').addClass('active');
+    						}
+    					}
+    					$('[data-put="'+edit_form_id+'"]').unbind('click');
+    					$('[data-put="'+edit_form_id+'"]').click(function(e){
+							$('.error').addClass('hide');
+							e.preventDefault();
+							$.ajax({
+						  			url:  a_url['put'],
+						  			type: 'POST',
+						  			data: edit_form.serialize(),
+						  			success: function(o_response, s_message, o_xhr) {
+						    			if(typeof(o_response.success) != 'undefined')
+						    			{
+						    				load_table($(table));
+						    			}
+						    			else
+						    			{
+						    				$('.error').removeClass('hide');
+						    				$('.error').html(o_response.error);
+						    			}
+						  			},
+						  			error: function(o_response)
+						  			{
+						  			}
+							});
+    					});
+    				}
+    			}
+    			else
+    			{
+    				$('.error').removeClass('hide');
+    				$('.error').html(o_response.error);
+    			}
+  			},
+  			error: function(o_response)
+  			{
+  			}
+	});
 }

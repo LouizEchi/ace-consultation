@@ -28,4 +28,10 @@ $(function(){
 		$('#frm_edit_teacher').addClass('hide');
 	});
 
+	$('#edit_teacher').click(function(e){
+		e.preventDefault();
+		$('#frm_edit_teacher').removeClass('hide');
+		$('#frm_add_teacher').addClass('hide');
+	});
+
 })

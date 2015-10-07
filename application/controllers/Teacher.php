@@ -119,13 +119,21 @@ class Teacher extends CI_Controller {
 
 					$user_result = $this->user_model->edit($a_user_data, 'id = '.$a_teacher_result[0]->user_id);
 
-					if($user_result)
+					if(!$this->user_model->error_message)
 					{
 						$a_teacher_data = array(
 							'department' => $this->input->post('department')
 						);
 						$teacher_result = $this->teacher_model->edit($a_teacher_data, 'id ='.$id);
+						if(!$this->teacher_model->error_message)
+						{
+							$this->data['error'] = $this->teacher_model->error_message;
+						}
 						$this->data['response'] = ['success' => 'true'];
+					}
+					else
+					{
+						$this->data['error'] = $this->user_model->error_message;
 					}
 				}
 				else

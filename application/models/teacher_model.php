@@ -40,7 +40,7 @@ class teacher_model extends Consultation_Model {
 		$result = false;
 		if($fields == '*')
 		{
-			$fields = 'teachers.*,users.id as user_id';
+			$fields = 'teachers.*,users.first_name, users.last_name, users.id as user_id';
 		}
 		$data = $this->getFillableData($data);
 		if($data)

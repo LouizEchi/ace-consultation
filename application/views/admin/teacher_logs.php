@@ -22,7 +22,7 @@
 							<td data-column="last_name"></td>
 							<td data-column="department"></td>
 							<td class="center-align">
-								<a class="btn waves-effect waves-light transparent-border" data-edit-url="<?=base_url()?>teacher/edit/id_placeholder"><i class="material-icons">edit</i></a>
+								<a class="btn button-collapse btn-form-side waves-effect waves-light transparent-border" data-edit-url="<?=base_url()?>teacher/edit/id_placeholder" id="edit_teacher" data-activates="slide-out"><i class="material-icons">edit</i></a>
 								<a href="" class="btn waves-effect waves-light transparent-border" data-delete-url="<?=base_url()?>teacher/delete/id_placeholder"><i class="material-icons">delete</i> </a></td>
 							</td>
 						</tr>
@@ -67,13 +67,9 @@
 		</div>
 	</form>
 
-	<form class="hide" data-put-url="<?=base_url()?>teacher/update/id_placeholder" data-get-url="<?=base_url()?>teacher/update/id_placeholder" id="frm_edit_teacher">
+	<form class="hide" data-put-url="<?=base_url()?>teacher/update/id_placeholder" data-temp-put-url="<?=base_url()?>teacher/update/id_placeholder" data-get-url="<?=base_url()?>teacher/read/id_placeholder" id="frm_edit_teacher">
 		<div class="row center-align">
 			<h5 class="center-align"><u>Edit Teacher</u></h5>
-			<div class="input-field col s8">
-	          <input id="username" type="text" name="username" class="validate">
-	          <label for="username">Username</label>
-			</div>
 			<div class="input-field col s8">
 	          <input id="first_name" type="text" name="first_name" class="validate">
 	          <label for="first_name">First Name</label>
@@ -87,7 +83,7 @@
 	          <label for="department">Department</label>
 	      	</div>
 	      	<div class="col s8 offset-s2 center-align">
-				<a class="waves-effect waves-light btn-large transparent-border white-text" id="add_new_teacher">Add Teacher</a>
+				<a class="waves-effect waves-light btn-large transparent-border white-text" href="#" data-put="frm_edit_teacher" id="btn_edit_teacher">Edit Teacher</a>
 			</div>
 		</div>
 	</form>

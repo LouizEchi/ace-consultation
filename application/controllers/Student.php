@@ -70,7 +70,7 @@ class Student extends CI_Controller {
 					'password' => md5($this->input->post('password')),
 					'first_name' => $this->input->post('first_name'),
 					'last_name' => $this->input->post('last_name'),
-					'user_type' => 2
+					'user_type' => 1
 				);
 
 				$user_result = $this->user_model->create($a_user_data);
@@ -132,21 +132,28 @@ class Student extends CI_Controller {
 				if($this->form_validation->run())
 				{
 					$a_user_data = array(
-						'username' 	 => $this->input->post('username'),
 						'first_name' => $this->input->post('first_name'),
 						'last_name' => $this->input->post('last_name'),
-						'user_type' => 2
+						'user_type' => 1
 					);
 
 					$user_result = $this->user_model->edit($a_user_data, 'id = '.$a_student_result[0]->user_id);
 
-					if($user_result)
+					if(!$this->user_model->error_message)
 					{
 						$a_student_data = array(
 							'course' => $this->input->post('course')
 						);
 						$student_result = $this->student_model->edit($a_student_data, 'id ='.$id);
+						if(!$this->student_model->error_message)
+						{
+							$this->data['error'] = $this->student_model->error_message;
+						}
 						$this->data['response'] = ['success' => 'true'];
+					}
+					else
+					{
+						$this->data['error'] = $this->user_model->error_message;
 					}
 				}
 				else

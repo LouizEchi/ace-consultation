@@ -25,6 +25,7 @@ $(function(){
 
 	$('#add_student').click(function(){
 		$('#frm_add_student').removeClass('hide');
+		$('#frm_edit_student').addClass('hide');
 	});
 
 })
