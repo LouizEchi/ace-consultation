@@ -58,3 +58,13 @@
                 }
             }
         ?>
+    <div class="container">
+        <div class="error-panel">
+            <div class="row">
+                <div class="error hide col s12 white-text transparent error-container">
+                </div>
+                <div class="confirm hide col s12 white-text transparent confirm-container">
+                </div>
+            </div>
+        </div>
+    </div>

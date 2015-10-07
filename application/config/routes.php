@@ -51,6 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'Home';
 $route['student'] = 'Student';
+$route['teacher'] = 'Teacher';
 $route['admin'] = 'Admin';
 $route['login'] = 'Login';
 $route['404_override'] = '';

@@ -23,6 +23,8 @@ class Student extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('url');
 		$this->load->model('teacher_model');
+		$this->load->model('student_model');
+		$this->load->model('user_model');
 		$this->data['s_page_header'] = 'student';
 		$this->data['s_page_type'] = 'student';
 
@@ -45,5 +47,143 @@ class Student extends CI_Controller {
 		$this->data['s_main_content'] = 'student/index';
 		$this->load->view('includes/template', $this->data);
 	}
+
+   public function create()
+    {
+    	if($this->input->post())
+    	{
+    		$this->form_validation->set_rules('username', 'First Name', 'is_unique[users.username]|trim|required');
+    		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[password_confirmation]');
+    		$this->form_validation->set_rules('password_confirmation', 'Password Confirmation', 'required');
+	    	$this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
+			$this->form_validation->set_rules('course', 'Department', 'trim|required');
+
+			if($this->form_validation->run())
+			{
+				$a_user_data = array(
+					'username' => $this->input->post('username'),
+					'password' => md5($this->input->post('password')),
+					'first_name' => $this->input->post('first_name'),
+					'last_name' => $this->input->post('last_name'),
+					'user_type' => 2
+				);
+
+				$user_result = $this->user_model->create($a_user_data);
+
+				if($user_result)
+				{
+					$a_student_data = array(
+						'user_id' => $user_result,
+						'course' => $this->input->post('course'),
+					);
+					$student_result = $this->student_model->create($a_student_data);
+					$this->data['response'] = ['success' => 'true'];
+				}
+			}
+			else
+			{
+				$this->data['error'] = validation_errors();
+			}
+		}
+		else
+		{
+			$this->data['error'] = ['code' => '9002', 'message' => 'No Input was found.'];
+		}
+
+		$this->load->view('json', $this->data);
+    }
+
+    public function read($id)
+    {
+    	$a_data = [
+    				'id' => $id,
+    				'users.user_type' => 1
+    	];
+    	$result = $this->student_model->retrieve($a_data);
+    	if($result)
+    	{
+    		unset($result[0]->password);
+    		$this->data['response'] = ['success' => 'true', 'data' => $result[0]];
+    	}
+    	else
+    	{
+    		$this->data['error'] = ['code' => '9004', 'message' => 'Record does not exist.'];
+    	}
+		$this->load->view('json', $this->data);
+    }
+
+    public function update($id)
+    {
+    	if($this->input->post())
+    	{
+    		$where_data = array('id' => $id); 
+			$a_student_result = $this->student_model->retrieve($where_data);
+			if($a_student_result)
+			{
+		    	$this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
+				$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
+				$this->form_validation->set_rules('course', 'course', 'trim|required');
+
+				if($this->form_validation->run())
+				{
+					$a_user_data = array(
+						'username' 	 => $this->input->post('username'),
+						'first_name' => $this->input->post('first_name'),
+						'last_name' => $this->input->post('last_name'),
+						'user_type' => 2
+					);
+
+					$user_result = $this->user_model->edit($a_user_data, 'id = '.$a_student_result[0]->user_id);
+
+					if($user_result)
+					{
+						$a_student_data = array(
+							'course' => $this->input->post('course')
+						);
+						$student_result = $this->student_model->edit($a_student_data, 'id ='.$id);
+						$this->data['response'] = ['success' => 'true'];
+					}
+				}
+				else
+				{
+					$this->data['error'] = validation_errors();
+				}
+			}
+			else
+			{
+				$this->data['error'] = ['code' => '9003', 'message' => 'No Records Found.'];
+			}
+		}
+		else
+		{
+			$this->data['error'] = ['code' => '9002', 'message' => 'No Input was found.'];
+		}
+
+		$this->load->view('json', $this->data);
+    }
+
+    public function delete($id)
+    {
+    	if($this->input->post())
+    	{
+			$where_data = array('id' => $id); 
+			$student_result = $this->student_model->retrieve($where_data);				
+			if($student_result)
+			{
+				$student_result = $student_result[0];
+				$this->student_model->delete(['id' => $student_result->id]);
+				$this->user_model->delete(['id' => $student_result->user_id]);
+
+				$this->data['response'] = ['success' => 'true'];
+			}
+			else
+			{
+				$this->data['error'] = ['code' => '9004', 'message' => 'Record does not exist.'];
+			}
+		}
+
+		$this->load->view('json', $this->data);
+    }
     
 }

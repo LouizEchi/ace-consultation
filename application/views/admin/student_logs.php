@@ -35,7 +35,7 @@
 	</div>
 </div>
 
-<div id="slide-out" class="side-nav side-form grey darken-3 white-text right">
+<div id="slide-out" class="side-nav side-form white-text right">
 	<div class="row">
 		<h5 class="center-align"><u>Add New Student</u></h5>
 		<div class="input-field col s8">

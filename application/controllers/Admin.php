@@ -38,6 +38,12 @@ class Admin extends CI_Controller {
 
 	public function teacher_logs()
 	{
+
+		$this->data['a_js_scripts'] = array(
+			base_url()  . 'assets/js/admin/base.js',
+			base_url()  . 'assets/js/admin/teacher/records.js'
+		);
+
 		$this->load->model('teacher_model');
 
 		$this->data['page_title'] = 'Teacher Logs';

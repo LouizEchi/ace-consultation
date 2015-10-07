@@ -1,6 +1,6 @@
 <?php
 
-Class user_model extends Base_Model
+Class user_model extends Consultation_Model
 {	
 
 	public function __construct()

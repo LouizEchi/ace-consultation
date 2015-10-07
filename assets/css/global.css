@@ -28,6 +28,19 @@
     background: transparent;
 }
 
+.transparent.error-container {
+    background: transparent;
+    border: solid 1px;
+    border-color: red;
+}
+
+.transparent.confirm-container {
+    background: transparent;
+    border: solid 1px;
+    border-color: blue;
+    padding: 25px;   
+}
+
 .transparent-border {
     background: transparent;
     border: solid 1px;
@@ -46,6 +59,15 @@
     border-color: #FFF;
 }
 
+.error-panel {
+    margin: 15px;
+    padding: 20px;
+}
+
 .dropdown-content {
     margin-top: 4%;
+}
+
+.side-form {
+    background: rgba(66,66,66,0.95);
 }
