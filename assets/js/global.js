@@ -71,7 +71,7 @@ function load_table(table) {
 								$(this).attr('data-id', o_response.data[i]['id']);
 								$(this).click(function(e){
 									e.preventDefault();
-									confirm_delete($(this));
+									confirm_delete($(this), table);
 								});
 							});
 
@@ -105,7 +105,7 @@ function load_table(table) {
 	}
 }
 
-function confirm_delete(btn)
+function confirm_delete(btn, table)
 {
 	container = $('.confirm.confirm-container');
 	container.removeClass('hide');
@@ -116,7 +116,7 @@ function confirm_delete(btn)
 
 					);
 	$('#btn_accept_delete').click(function(){
-		delete_item(btn);
+		delete_item(btn, table);
 		container.addClass('hide');
 	})
 
@@ -125,7 +125,7 @@ function confirm_delete(btn)
 	})
 }
 
-function delete_item(btn)
+function delete_item(btn, table)
 {
 	$.ajax({
   			url:  btn.attr('href'),
@@ -134,7 +134,7 @@ function delete_item(btn)
   			success: function(o_response, s_message, o_xhr) {
     			if(typeof(o_response.success) != 'undefined')
     			{
-    				load_table($('#tbl_teachers'));
+    				load_table(table);
     			}
     			else
     			{

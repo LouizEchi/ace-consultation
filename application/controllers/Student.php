@@ -22,6 +22,10 @@ class Student extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->helper('form');
+
+		$this->load->library('form_validation');
+
 		$this->load->model('teacher_model');
 		$this->load->model('student_model');
 		$this->load->model('user_model');
@@ -52,12 +56,12 @@ class Student extends CI_Controller {
     {
     	if($this->input->post())
     	{
-    		$this->form_validation->set_rules('username', 'First Name', 'is_unique[users.username]|trim|required');
+    		$this->form_validation->set_rules('username', 'Username', 'is_unique[users.username]|trim|required');
     		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[password_confirmation]');
     		$this->form_validation->set_rules('password_confirmation', 'Password Confirmation', 'required');
 	    	$this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
-			$this->form_validation->set_rules('course', 'Department', 'trim|required');
+			$this->form_validation->set_rules('course', 'Course', 'trim|required');
 
 			if($this->form_validation->run())
 			{
@@ -182,6 +186,22 @@ class Student extends CI_Controller {
 				$this->data['error'] = ['code' => '9004', 'message' => 'Record does not exist.'];
 			}
 		}
+
+		$this->load->view('json', $this->data);
+    }
+
+    public function retrieve_all()
+    {
+		$student_result = $this->student_model->retrieveAll();				
+		if($student_result)
+		{
+			$this->data['response'] = ['success' => 'true', 'data' => $student_result];
+		}
+		else
+		{
+			$this->data['error'] = ['code' => '9003', 'message' => 'No Records Found.'];
+		}
+
 
 		$this->load->view('json', $this->data);
     }
