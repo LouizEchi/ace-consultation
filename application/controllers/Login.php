@@ -34,7 +34,7 @@ class Login extends CI_Controller {
 				base_url() . 'assets/css/home/index.css'
 			);
 	}
-    
+
 	public function index()
 	{
 
@@ -60,6 +60,10 @@ class Login extends CI_Controller {
 				{
 					redirect(base_url().'admin');
 				}
+				else
+				{
+					redirect(base_url());
+				}
 			}
 			else
 			{
@@ -71,7 +75,7 @@ class Login extends CI_Controller {
 			$this->data['error'] = validation_errors();
 			print_r(validation_errors());
 		}
-		
+
 	}
 
 	public function logout()
@@ -79,5 +83,5 @@ class Login extends CI_Controller {
 		$this->session->sess_destroy();
 		redirect(base_url());
 	}
-    
+
 }
