@@ -3,7 +3,7 @@
 	<div class="card-panel panel panel-student">
 		<div class="row white-text">
 			<div class="col s12">
-				<table class="highlight" id="tbl_consulatation_logs" xurl="<?=base_url()?>logs/retrieve_all">
+				<table class="highlight" id="tbl_consulatation_logs" xurl="<?=base_url()?>logs/retrieve_student_logs/<?=$student_id?>">
 					<thead>
 						<tr>
 							<th>ID</th>
@@ -57,7 +57,7 @@
 				  		{
 				  			foreach($a_teachers_list as $key => $teacher)
 				  			{
-				  				echo '<option value="'.$key.'">'.$teacher. '</a><li>'; 
+				  				echo '<option value="'.$key.'">'.$teacher. '</a><li>';
 				  			}
 				  		}
 
@@ -74,7 +74,7 @@
 				  		{
 				  			foreach($a_category_list as $key => $category)
 				  			{
-				  				echo '<option value="'.$key.'">'.$category. '</a><li>'; 
+				  				echo '<option value="'.$key.'">'.$category. '</a><li>';
 				  			}
 				  		}
 

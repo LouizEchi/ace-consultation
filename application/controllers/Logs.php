@@ -32,7 +32,7 @@ class Logs extends CI_Controller {
 		$this->data['s_page_header'] = 'consultation';
 		$this->data['s_page_type'] = 'consultation';
 	}
-    
+
     public function index()
    	{
 
@@ -104,7 +104,7 @@ class Logs extends CI_Controller {
     {
     	if($this->input->post())
     	{
-    		$where_data = array('id' => $id); 
+    		$where_data = array('id' => $id);
 			$a_teacher_result = $this->teacher_model->retrieve($where_data);
 			if($a_teacher_result)
 			{
@@ -162,56 +162,89 @@ class Logs extends CI_Controller {
     {
     	if($this->input->post())
     	{
-			$where_data = array('id' => $id); 
-			$teacher_result = $this->teacher_model->retrieve($where_data);				
-			if($teacher_result)
-			{
-				$teacher_result = $teacher_result[0];
-				$this->teacher_model->delete(['id' => $teacher_result->id]);
-				$this->user_model->delete(['id' => $teacher_result->user_id]);
+				$where_data = array('id' => $id);
+				$teacher_result = $this->teacher_model->retrieve($where_data);
+				if($teacher_result)
+				{
+					$teacher_result = $teacher_result[0];
+					$this->teacher_model->delete(['id' => $teacher_result->id]);
+					$this->user_model->delete(['id' => $teacher_result->user_id]);
 
-				$this->data['response'] = ['success' => 'true'];
+					$this->data['response'] = ['success' => 'true'];
+				}
+				else
+				{
+					$this->data['error'] = ['code' => '9004', 'message' => 'Record does not exist.'];
+				}
+			}
+
+			$this->load->view('json', $this->data);
+    }
+
+		public function retrieve_student_logs($student_id)
+		{
+			$consultation_result = $this->consultation_logs_model->retrieveStudentLogs($student_id);
+			if($consultation_result)
+			{
+				$a_return = [];
+				foreach($consultation_result as $record)
+				{
+					$a_student_data = array(
+						'id' => $record['student_user_id']
+					);
+					$a_teacher_data = array(
+						'id' => $record['teacher_user_id']
+					);
+					$teacher_result = $this->user_model->retrieve($a_teacher_data)[0];
+					$record['teacher_name'] = $teacher_result->first_name . ' ' . $teacher_result->last_name;
+
+					$student_result = $this->user_model->retrieve($a_student_data)[0];
+					$record['student_name'] = $student_result->first_name . ' ' . $student_result->last_name;
+
+					$a_return[] = $record;
+				}
+				$this->data['response'] = ['success' => 'true', 'data' => $a_return];
 			}
 			else
 			{
-				$this->data['error'] = ['code' => '9004', 'message' => 'Record does not exist.'];
+				$this->data['error'] = ['code' => '9003', 'message' => 'No Records Found.'];
 			}
-		}
 
-		$this->load->view('json', $this->data);
-    }
+
+			$this->load->view('json', $this->data);
+		}
 
     public function retrieve_all()
     {
-		$consultation_result = $this->consultation_logs_model->retrieveAll();				
-		if($consultation_result)
-		{
-			$a_return = [];
-			foreach($consultation_result as $record)
+			$consultation_result = $this->consultation_logs_model->retrieveAll();
+			if($consultation_result)
 			{
-				$a_student_data = array(
-					'id' => $record['student_user_id']
-				);
-				$a_teacher_data = array(
-					'id' => $record['teacher_user_id']
-				);
-				$teacher_result = $this->user_model->retrieve($a_teacher_data)[0];
-				$record['teacher_name'] = $teacher_result->first_name . ' ' . $teacher_result->last_name;
+				$a_return = [];
+				foreach($consultation_result as $record)
+				{
+					$a_student_data = array(
+						'id' => $record['student_user_id']
+					);
+					$a_teacher_data = array(
+						'id' => $record['teacher_user_id']
+					);
+					$teacher_result = $this->user_model->retrieve($a_teacher_data)[0];
+					$record['teacher_name'] = $teacher_result->first_name . ' ' . $teacher_result->last_name;
 
-				$student_result = $this->user_model->retrieve($a_student_data)[0];
-				$record['student_name'] = $student_result->first_name . ' ' . $student_result->last_name;
+					$student_result = $this->user_model->retrieve($a_student_data)[0];
+					$record['student_name'] = $student_result->first_name . ' ' . $student_result->last_name;
 
-				$a_return[] = $record;
+					$a_return[] = $record;
+				}
+				$this->data['response'] = ['success' => 'true', 'data' => $a_return];
 			}
-			$this->data['response'] = ['success' => 'true', 'data' => $a_return];
-		}
-		else
-		{
-			$this->data['error'] = ['code' => '9003', 'message' => 'No Records Found.'];
-		}
+			else
+			{
+				$this->data['error'] = ['code' => '9003', 'message' => 'No Records Found.'];
+			}
 
 
-		$this->load->view('json', $this->data);
+			$this->load->view('json', $this->data);
     }
 
     public function check_time_out($student_id)

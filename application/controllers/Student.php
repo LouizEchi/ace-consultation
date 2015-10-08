@@ -42,27 +42,33 @@ class Student extends Consultation_Controller {
 
 		if($user = $this->session->userdata('user'))
 		{
-			if($user['user_type'] != 1)
+			if($user['user_type'] != 3)
 			{
-				redirect('/', 'refresh');
-			}
-			else
-			{
-				$student = $this->student_model->retrieve(['user_id' => $user['id']])[0];
+				if($user['user_type'] != 1)
+				{
+					redirect('/', 'refresh');
+				}
+				else
+				{
+					$student = $this->student_model->retrieve(['user_id' => $user['id']])[0];
 
-				if(!$student)
-					redirect(base_url());
-				$this->data['student_id'] = $student->id;
-				$this->data['user_id'] = $student->user_id;
-				$this->data['name'] =  $student->first_name . ' ' . $student->last_name;
+					if(!$student)
+						redirect(base_url());
+					$this->data['student_id'] = $student->id;
+					$this->data['user_id'] = $student->user_id;
+					$this->data['name'] =  $student->first_name . ' ' . $student->last_name;
 
+				}
 			}
 		}
 	}
-    
+
 	public function index()
 	{
+		$student = $this->student_model->retrieve(['user_id' =>  $this->session->userdata('user')['id']])[0];
 
+		if(!$student)
+			redirect(base_url());
 		$this->data['a_js_scripts'] = array(
 				base_url()  . 'assets/js/student/base.js',
 				base_url()  . 'assets/js/student/index.js'
@@ -162,7 +168,7 @@ class Student extends Consultation_Controller {
     {
     	if($this->input->post())
     	{
-    		$where_data = array('id' => $id); 
+    		$where_data = array('id' => $id);
 			$a_student_result = $this->student_model->retrieve($where_data);
 			if($a_student_result)
 			{
@@ -219,8 +225,8 @@ class Student extends Consultation_Controller {
     {
     	if($this->input->post())
     	{
-			$where_data = array('id' => $id); 
-			$student_result = $this->student_model->retrieve($where_data);				
+			$where_data = array('id' => $id);
+			$student_result = $this->student_model->retrieve($where_data);
 			if($student_result)
 			{
 				$student_result = $student_result[0];
@@ -240,7 +246,7 @@ class Student extends Consultation_Controller {
 
     public function retrieve_all()
     {
-		$student_result = $this->student_model->retrieveAll();				
+		$student_result = $this->student_model->retrieveAll();
 		if($student_result)
 		{
 			$this->data['response'] = ['success' => 'true', 'data' => $student_result];
@@ -253,5 +259,5 @@ class Student extends Consultation_Controller {
 
 		$this->load->view('json', $this->data);
     }
-    
+
 }
